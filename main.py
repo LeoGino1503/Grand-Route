@@ -29,15 +29,17 @@ class Game(RelativeLayout):
         # Game loop
         Clock.schedule_interval(self.update, 1/60)
 
-    def _keydown(self, instance, keyboard, keycode, text, modifiers):
-        self.keys_pressed.add(keycode)
+    def _keydown(self, window, key, scancode, codepoint, modifiers):
+        print("Key down:", key)
+        self.keys_pressed.add(key)
 
-    def _keyup(self, instance, keyboard, keycode):
-        if keycode in self.keys_pressed:
-            self.keys_pressed.remove(keycode)
+    def _keyup(self, window, key, scancode):
+        if key in self.keys_pressed:
+            self.keys_pressed.remove(key)
 
     def update(self, dt):
-        self.player.update(self.keys_pressed, self.hub.platforms)
+        self.player.update(dt, self.hub.platforms, self.keys_pressed)
+
 
 
 class GameApp(App):
