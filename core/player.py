@@ -36,12 +36,12 @@ class Player(Widget):
                 "./assets/tiles/player/run/6.png",
             ],
             "jump": [
-                "./assets/player/jump/1.png",
-                "./assets/player/jump/2.png",
-                "./assets/player/jump/3.png",
+                "./assets/tiles/player/jump/1.png",
+                "./assets/tiles/player/jump/2.png",
+                "./assets/tiles/player/jump/3.png",
             ],
             "fall": [
-                "./assets/player/fall/fall.png",
+                "./assets/tiles/player/fall/fall.png",
             ],
         }
 

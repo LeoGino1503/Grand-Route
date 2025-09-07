@@ -4,6 +4,7 @@ from core.platform import Platform
 from utils.load_map import load_map_csv
 from utils.texture import make_vertical_gradient
 from core.animation import AnimatedPlatform
+from core.npc import NPC
 
 # Tileset mapping: id trong CSV -> file ảnh
 TILESET = {
@@ -30,6 +31,19 @@ TILESET = {
         "./assets/tiles/water/water4.png",
     ], # animated water
 }
+# NPC mapping: id trong CSV -> config NPC
+NPCSET = {
+    100: {
+        "name": "goblin",
+        "dialog": ["Chào bạn!", "Tôi là goblin."],
+        "patrol_range": None
+    },
+    101: {
+        "name": "goblin",
+        "dialog": ["Tôi đi tuần đây!", "Đừng lại gần!"],
+        "patrol_range": 120
+    }
+}
 
 # Load các layer từ CSV
 grid_back = load_map_csv("./assets/maps/hub_0.csv")   # background
@@ -50,6 +64,17 @@ class Hub(RelativeLayout):
 
         # Platforms
         self.platforms = []
+        self.npcs = []
+
+        # --- Thêm NPC vào Hub ---
+        # goblin = NPC(
+        #     name="goblin",
+        #     pos=(400, 150),
+        #     dialog=["Chào bạn!", "Tôi là goblin."],
+        #     patrol_range=None
+        # )
+        # self.add_widget(goblin)
+        # self.npcs.append(goblin)
 
         tile_size = 64
         layers = [
@@ -63,12 +88,25 @@ class Hub(RelativeLayout):
             for y, row in enumerate(grid):
                 for x, cell in enumerate(row):
                     if cell != -1:
+                        pos_x = x * tile_size
+                        pos_y = (rows - y - 1) * tile_size
+
+                        # --- Check NPC ---
+                        npc_config = NPCSET.get(cell)
+                        if npc_config:
+                            npc = NPC(
+                                name=npc_config["name"],
+                                pos=(pos_x, pos_y),
+                                dialog=npc_config["dialog"],
+                                patrol_range=npc_config["patrol_range"]
+                            )
+                            self.add_widget(npc)
+                            self.npcs.append(npc)
+                            continue
+
+                        # --- Check tile ---
                         tex = TILESET.get(cell)
                         if tex:
-                            pos_x = x * tile_size
-                            pos_y = (rows - y - 1) * tile_size
-
-                            # Nếu là animation (list ảnh)
                             if isinstance(tex, list):
                                 block = AnimatedPlatform(
                                     pos=(pos_x, pos_y),
@@ -83,7 +121,6 @@ class Hub(RelativeLayout):
                                     source=tex
                                 )
 
-                            # Thêm widget theo z_index
                             if z_index == 0:
                                 self.add_widget(block, index=0)
                             elif z_index == 2:
