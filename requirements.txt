@@ -1,3 +1,4 @@
 kivy
 cython
 pygame
+pillow

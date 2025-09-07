@@ -1,0 +1,10 @@
+rules:
+0 - back
+1 - main
+2 - front
+hub:
+- 0: None
+- 1: Player
+- 2: Platform
+- 3: NPC
+- 4: Object

@@ -7,7 +7,8 @@ from core.player import Player
 from scenes.hub import Hub
 
 Window.size = (1280, 720)
-Window.rotation = 90
+Window.minimum_width, Window.minimum_height = Window.size
+Window.maximum_width, Window.maximum_height = Window.size
 
 class Game(RelativeLayout):
     def __init__(self, **kwargs):
