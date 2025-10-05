@@ -2,3 +2,4 @@ kivy
 cython
 pygame
 pillow
+websockets

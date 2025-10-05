@@ -11,6 +11,11 @@ from ui.dialog import DialogPopup
 Window.size = (1280, 720)
 Window.minimum_width, Window.minimum_height = Window.size
 Window.maximum_width, Window.maximum_height = Window.size
+screen_w, screen_h = Window.system_size
+
+# Tính toán vị trí để cửa sổ nằm giữa
+Window.left = 100
+Window.top = 50
 
 class Game(RelativeLayout):
     def __init__(self, **kwargs):

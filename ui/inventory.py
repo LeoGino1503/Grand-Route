@@ -7,13 +7,13 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.widget import Widget
 from kivy.graphics import Color, Rectangle
 from kivy.animation import Animation
-
+import requests
 
 class InventorySlot(FloatLayout):
     def __init__(self, icon_path=None, quantity=0, **kwargs):
         super().__init__(**kwargs)
         self.size_hint = (None, None)
-        self.size = (64, 64)  # mỗi ô 64x64 px
+        self.size = (128, 128)  # mỗi ô 64x64 px
 
         # background viền xám
         with self.canvas.before:
