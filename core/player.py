@@ -4,11 +4,9 @@ from kivy.clock import Clock
 from kivy.core.audio import SoundLoader
 import math
 
-
 GRAVITY = -0.8
 MOVE_SPEED = 8
 JUMP_FORCE = 16
-
 
 class Player(Widget):
     def __init__(self, pos=(0, 0), size=(64, 64), **kwargs):
@@ -70,6 +68,10 @@ class Player(Widget):
         # Âm thanh
         self.jump_sound = SoundLoader.load("./assets/audio/jump.wav")
         self.hit_sound = SoundLoader.load("./assets/audio/hit.wav")
+
+        # Thông tin người chơi (có thể mở rộng)
+        # self.power = data.get("power")
+        # self.gold = data.get("gold")
 
         # Update loop
         Clock.schedule_interval(self.animate, 1 / 60)

@@ -3,3 +3,4 @@ cython
 pygame
 pillow
 websockets
+python-dotenv
