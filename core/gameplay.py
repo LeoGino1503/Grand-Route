@@ -8,6 +8,8 @@ from network.client_ws import GameClient
 from utils.isnear import is_near
 from ui.dialog import DialogPopup
 import asyncio, threading
+from kivy.uix.image import Image
+from core.healthbar import HpManaBar
 
 class Game(RelativeLayout):
     def __init__(self, WS_ENDPOINT, player_data, **kwargs):
@@ -41,6 +43,10 @@ class Game(RelativeLayout):
 
         self.last_sent_time = 0
         self.send_interval = 0.01
+
+        # Health Bar
+        self.healthbar = HpManaBar()
+        self.add_widget(self.healthbar)
 
     # -----------------------------
     # Input & update methods
