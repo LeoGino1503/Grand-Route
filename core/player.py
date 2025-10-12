@@ -73,6 +73,8 @@ class Player(Widget):
         # self.power = data.get("power")
         # self.gold = data.get("gold")
 
+        self.inventory = []
+
         # Update loop
         Clock.schedule_interval(self.animate, 1 / 60)
 
@@ -159,7 +161,6 @@ class Player(Widget):
                 self.hit_sound.play()
             self.invincible = True
             self.hurt_time = current_time
-
     def update_invincibility(self, current_time):
         if self.invincible and (current_time - self.hurt_time) > self.invincibility_duration:
             self.invincible = False

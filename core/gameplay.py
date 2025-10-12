@@ -10,6 +10,18 @@ from ui.dialog import DialogPopup
 import asyncio, threading
 from kivy.uix.image import Image
 from core.healthbar import HpManaBar
+from core.slotbar import SlotBar
+from core.inventory import InventoryWidget
+import requests 
+from dotenv import load_dotenv
+import os
+# ----------------------------
+# Load .env
+# ----------------------------
+load_dotenv()
+API_BASE_URL = os.getenv("API_BASE_URL")
+API_LOGIN_URL = API_BASE_URL + os.getenv("API_LOGIN_ENDPOINT", "/login")
+API_GET_ITEMS = API_BASE_URL + os.getenv("API_GET_ITEMS_ENDPOINT", "/get_items")
 
 class Game(RelativeLayout):
     def __init__(self, WS_ENDPOINT, player_data, **kwargs):
@@ -48,12 +60,33 @@ class Game(RelativeLayout):
         self.healthbar = HpManaBar()
         self.add_widget(self.healthbar)
 
+        # Slot Bar
+        self.slot_bar = SlotBar(
+            icons=[
+                "./assets/ui/Slot_Empty_Single.png",
+                "./assets/ui/Slot_Empty_Single.png",
+                "./assets/ui/Slot_Empty_Single.png",
+                "./assets/ui/Slot_Empty_Single.png",
+                "./assets/ui/Slot_Empty_Single.png",
+            ]
+        )
+        self.add_widget(self.slot_bar)
+
+        self.inventory_open = False
+        self.inventory_widget = InventoryWidget()
+        self.add_widget(self.inventory_widget)
+        self.inventory_widget.opacity = 0
+
     # -----------------------------
     # Input & update methods
     # -----------------------------
     def _keydown(self, window, key, scancode, codepoint, modifiers):
         if self.dialog_open:
             return
+        if key == 9:
+            self.toggle_inventory()
+            return  # tránh xử lý tiếp phần khác
+
         self.keys_pressed.add(key)
         if codepoint == "e":
             for npc in self.hub.npcs:
@@ -63,7 +96,7 @@ class Game(RelativeLayout):
                     self.dialog_open = True
                     popup.bind(on_dismiss=lambda *a: self._close_dialog())
                     popup.open()
-
+        
     def _keyup(self, window, key, scancode):
         self.keys_pressed.discard(key)
 
@@ -118,3 +151,8 @@ class Game(RelativeLayout):
 
     def _close_dialog(self):
         self.dialog_open = False
+
+    def toggle_inventory(self):
+        self.inventory_widget.get_items(self.player_id, API_GET_ITEMS)
+        self.inventory_widget.toggle()
+        self.player.can_move = not self.inventory_widget.is_open
